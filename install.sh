@@ -46,3 +46,12 @@ chmod +x ~/.config/bspwm/bspwmrc
 
 # Sustituir el archivo de configuración de sxhkd
 cp -f ~/auto_bspwm/sxhdrc_new ~/.config/sxhkd/sxhkdrc
+
+# Instalar kitty
+sudo apt install kitty -y
+mkdir -p ~/.config/kitty
+cp -f ~/auto_bspwm/kitty.conf ~/.config/kitty/
+cp -f ~/auto_bspwm/color.ini ~/.config/kitty/
+
+# Meter las hack nerd fonts
+cp -r ~/auto_bspwm/Hack ~/usr/share/fonts/
