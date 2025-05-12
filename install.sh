@@ -117,6 +117,13 @@ cp -f ~/auto_bspwm/picom.conf ~/.config/picom
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
 sudo apt install -y rofi
 
+# Meter los nuevos archivos de la polybar
+cp -r ~/auto_bspwm/polybar/ ~/.config/polybar/
+
+# Meter los nuevos archivos binarios
+mkdir -p ~.config/bin
+cp -r ~/auto_bspwm/bin/* ~/.config/bin/
+
 # Limpiar archivos temporales
 echo -e "${blueColour}[+] Limpiando archivos temporales...${endColour}"
 rm -rf ~/bspwm ~/sxhkd ~/polybar ~/picom ~/blue-sky
