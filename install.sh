@@ -12,6 +12,12 @@ grayColour="\e[0;37m\033[1m"
 
 echo -e "\n${greenColour}bspwm installer for Kali Linux${endColour} - ${yellowColour}Made by xk4libur${endColour}\n"
 
+# Verificar si el sistema operativo es Kali Linux
+if ! grep -qi "kali" /etc/os-release; then
+    echo -e "${yellowColour}[!] Este script está diseñado para Kali Linux${endColour}"
+    exit 1
+fi
+
 # Función para manejar errores
 handle_error() {
     echo -e "${redColour}[ERROR]${endColour} Algo salió mal en el paso anterior"
@@ -62,7 +68,7 @@ if [ -d ~/auto_bspwm ]; then
     echo -e "${blueColour}[+] Copiando configuraciones personalizadas...${endColour}"
     
     # bspwm
-    if [ -f ~/auto_bspwm/bspwmrc ]; then
+    if [ -f ~/auto_bspwm/bspwmrc_new ]; then
         cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc || handle_error
     fi
 
@@ -110,9 +116,8 @@ cd ~/blue-sky/polybar/ || handle_error
 cp -r * ~/.config/polybar || handle_error
 echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc || handle_error
 cd fonts || handle_error
-sudo cp * /usr/share/fonts/truetype/ || handle_error
+sudo cp *.ttf /usr/share/fonts/truetype/ || handle_error
 fc-cache -v || handle_error
-
 
 # Instalar picom
 echo -e "${blueColour}[+] Instalando picom...${endColour}"
@@ -126,14 +131,15 @@ sudo ninja -C build install || handle_error
 # Configurar picom
 echo -e "${blueColour}[+] Configurando picom...${endColour}"
 mkdir -p ~/.config/picom || handle_error
-cd ~/.config/picom || handle_error
-  if [ -f ~/auto_bspwm/picom.conf ]; then
-        cp -f ~/auto_bspwm/picom.conf ~/.config/picom|| handle_error
-  fi
+cp -f ~/auto_bspwm/picom.conf ~/.config/picom || handle_error
 
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
 sudo apt install -y rofi || handle_error
+
+# Limpiar archivos temporales
+echo -e "${blueColour}[+] Limpiando archivos temporales...${endColour}"
+rm -rf ~/bspwm ~/sxhkd ~/polybar ~/picom ~/blue-sky
 
 echo -e "\n${greenColour}[+] Instalación completada con éxito!${endColour}"
 echo -e "${blueColour}[*] Para iniciar bspwm, cierra sesión y seleccionalo en el gestor de ventanas${endColour}"
