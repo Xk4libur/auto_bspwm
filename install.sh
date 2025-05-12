@@ -38,15 +38,16 @@ sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
 
 # Clonar y compilar bspwm
 echo -e "${blueColour}[+] Clonando y compilando bspwm...${endColour}"
-cd ~
+cd ~/Downloads
 git clone https://github.com/baskerville/bspwm.git
 cd bspwm
 make
 sudo make install
+sudo apt install -y bspwm
 
 # Clonar y compilar sxhkd
 echo -e "${blueColour}[+] Clonando y compilando sxhkd...${endColour}"
-cd ~
+cd ~/Downloads
 git clone https://github.com/baskerville/sxhkd.git
 cd sxhkd
 make
@@ -57,41 +58,25 @@ echo -e "${blueColour}[+] Configurando bspwm y sxhkd...${endColour}"
 mkdir -p ~/.config/{bspwm,sxhkd}
 
 # Copiar configuraciones personalizadas si existen
-if [ -d ~/auto_bspwm ]; then
-    echo -e "${blueColour}[+] Copiando configuraciones personalizadas...${endColour}"
+echo -e "${blueColour}[+] Copiando configuraciones personalizadas...${endColour}"
 
-    # bspwm
-    if [ -f ~/auto_bspwm/bspwmrc_new ]; then
-        cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
-    fi
+# bspwm
+cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
 
-    # sxhkd
-    if [ -f ~/auto_bspwm/sxhkdrc_new ]; then
-        cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
-    fi
+# sxhkd
+cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
 
-    # kitty
-    sudo apt install -y kitty
-    mkdir -p ~/.config/kitty
-    if [ -f ~/auto_bspwm/kitty.conf ]; then
-        cp -f ~/auto_bspwm/kitty.conf ~/.config/kitty/
-    fi
-    if [ -f ~/auto_bspwm/color.ini ]; then
-        cp -f ~/auto_bspwm/color.ini ~/.config/kitty/
-    fi
+# kitty
+sudo apt install -y kitty
+mkdir -p ~/.config/kitty
+sudo mv ~/auto_bspwm/kitty.conf ~/.config/kitty/
+sudo mv ~/auto_bspwm/color.ini ~/.config/kitty/
+sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
 
-    # Fuentes Hack Nerd
-    if [ -d ~/auto_bspwm/Hack ]; then
-        sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
-        sudo fc-cache -fv
-    fi
-else
-    echo -e "${yellowColour}[!] No se encontró el directorio auto_bspwm con configuraciones personalizadas${endColour}"
-fi
 
 # Instalar polybar
 echo -e "${blueColour}[+] Instalando polybar...${endColour}"
-cd ~
+cd ~/Downloads
 git clone --recursive https://github.com/polybar/polybar
 cd polybar
 mkdir build && cd build
@@ -101,20 +86,20 @@ sudo make install
 
 # Configurar polybar
 echo -e "${blueColour}[+] Configurando polybar...${endColour}"
-cd ~
+cd ~/Downloads
 git clone https://github.com/VaughnValle/blue-sky.git
 mkdir -p ~/.config/polybar
-cd ~/blue-sky/polybar/
-cp -r * ~/.config/polybar
-chmod +x ~/.config/polybar/launch.sh
+cd ~/Downloads/blue-sky/polybar/
+cp -r * ~/.config/polybar/
 echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
 cd fonts
-sudo cp *.ttf /usr/share/fonts/truetype/
+sudo cp * /usr/share/fonts/truetype/
 fc-cache -v
+
 
 # Instalar picom
 echo -e "${blueColour}[+] Instalando picom...${endColour}"
-cd ~
+cd ~/Downloads
 git clone https://github.com/ibhagwan/picom.git
 cd picom/
 git submodule update --init --recursive
