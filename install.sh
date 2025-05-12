@@ -12,13 +12,6 @@ grayColour="\e[0;37m\033[1m
 
 echo -e "${greenColour}bspwm installer 4 kali${endColour} - ${yellowColour}Made by xk4libur${endColour}"
 
-read -sp "[?] Ingresa tu contraseña de sudo: " password
-echo -e "\n"
-
-# Habilitar sudo sin contraseña por 15 minutos (requiere contraseña inicial)
-echo "$password" | sudo -S bash -c "echo '$USER ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/temp_nopasswd" 2>/dev/null
-trap 'sudo rm -f /etc/sudoers.d/temp_nopasswd' EXIT  # Eliminar al finalizar
-
 # Instalar dependencias
 sudo apt update && sudo apt install -y \
   build-essential git vim xcb libxcb-util0-dev libxcb-ewmh-dev \
