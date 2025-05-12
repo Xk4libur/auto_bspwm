@@ -122,12 +122,12 @@ fc-cache -v || handle_error
 
 # Instalar picom
 echo -e "${blueColour}[+] Instalando picom...${endColour}"
-git clone https://github.com/ibhagwan/picom.git
-cd picom/
-git submodule update --init --recursive
-meson --buildtype=release . build
-ninja -C build
-sudo ninja -C build install
+git clone https://github.com/ibhagwan/picom.git || handle_error
+cd picom/ || handle_error
+git submodule update --init --recursive || handle_error
+meson --buildtype=release . build || handle_error
+ninja -C build || handle_error
+sudo ninja -C build install || handle_error
 
 # Configurar picom
 echo -e "${blueColour}[+] Configurando picom...${endColour}"
