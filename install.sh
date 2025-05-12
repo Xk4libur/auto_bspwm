@@ -21,7 +21,7 @@ handle_error() {
 # Instalar dependencias
 echo -e "${blueColour}[+] Instalando dependencias...${endColour}"
 sudo apt update && sudo apt install -y \
-    build-essential git vim xcb libxcb-util0-dev libxcb-ewmh-dev \
+    build-essential git vim libxcb-util0-dev libxcb-ewmh-dev \
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev \
     libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev \
     libxcb-xrm-dev || handle_error
