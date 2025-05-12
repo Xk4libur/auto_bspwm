@@ -12,11 +12,6 @@ grayColour="\033[0;37m\033[1m"
 
 echo -e "\n${greenColour}bspwm installer for Kali Linux${endColour} - ${yellowColour}Made by xk4libur${endColour}\n"
 
-# Verificar si el sistema operativo es Kali Linux
-if ! grep -qi "kali" /etc/os-release; then
-    echo -e "${yellowColour}[!] Este script está diseñado para Kali Linux${endColour}"
-    exit 1
-fi
 
 # Instalar dependencias
 echo -e "${blueColour}[+] Instalando dependencias...${endColour}"
