@@ -43,6 +43,7 @@ git clone https://github.com/baskerville/bspwm.git || handle_error
 cd bspwm || handle_error
 make || handle_error
 sudo make install || handle_error
+sudo apt install -y bspwm || handle_error
 
 # Clonar y compilar sxhkd
 echo -e "${blueColour}[+] Clonando y compilando sxhkd...${endColour}"
@@ -52,27 +53,19 @@ cd sxhkd || handle_error
 make || handle_error
 sudo make install || handle_error
 
-# Instalar bspwm desde repositorios (para asegurar dependencias)
-echo -e "${blueColour}[+] Instalando bspwm desde repositorios...${endColour}"
-sudo apt install -y bspwm || handle_error
-
 # Configuración de bspwm y sxhkd
 echo -e "${blueColour}[+] Configurando bspwm y sxhkd...${endColour}"
 mkdir -p ~/.config/{bspwm,sxhkd} || handle_error
-
-# Copiar archivos de configuración de ejemplo
-if [ -d "/usr/share/doc/bspwm/examples/" ]; then
-    sudo cp /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/ || handle_error
-    sudo cp /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/ || handle_error
-    sudo chmod +x ~/.config/bspwm/bspwmrc || handle_error
-else
-    echo -e "${yellowColour}[!] No se encontraron los archivos de ejemplo en /usr/share/doc/bspwm/examples/${endColour}"
-fi
 
 # Copiar configuraciones personalizadas si existen
 if [ -d ~/auto_bspwm ]; then
     echo -e "${blueColour}[+] Copiando configuraciones personalizadas...${endColour}"
     
+    # bspwm
+    if [ -f ~/auto_bspwm/bspwmrc ]; then
+        cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc || handle_error
+    fi
+
     # sxhkd
     if [ -f ~/auto_bspwm/sxhkdrc_new ]; then
         cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc || handle_error
@@ -115,7 +108,7 @@ git clone https://github.com/VaughnValle/blue-sky.git || handle_error
 mkdir ~/.config/polybar || handle_error
 cd ~/Downloads/blue-sky/polybar/ || handle_error
 sudo cp * -r ~/.config/polybar || handle_error
-echo '~/.config/polybar/launch.sh &' >> ~/.config/bspwm/bspwmrc || handle_error
+echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc || handle_error
 cd fonts || handle_error
 sudo cp * /usr/share/fonts/truetype/ || handle_error
 fc-cache -v || handle_error
