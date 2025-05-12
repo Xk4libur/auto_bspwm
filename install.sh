@@ -106,12 +106,13 @@ echo -e "${blueColour}[+] Configurando polybar...${endColour}"
 cd ~ || handle_error
 git clone https://github.com/VaughnValle/blue-sky.git || handle_error
 mkdir ~/.config/polybar || handle_error
-cd ~/Downloads/blue-sky/polybar/ || handle_error
-sudo cp * -r ~/.config/polybar || handle_error
+cd ~/blue-sky/polybar/ || handle_error
+cp -r * ~/.config/polybar || handle_error
 echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc || handle_error
 cd fonts || handle_error
 sudo cp * /usr/share/fonts/truetype/ || handle_error
 fc-cache -v || handle_error
+
 
 # Instalar picom
 echo -e "${blueColour}[+] Instalando picom...${endColour}"
