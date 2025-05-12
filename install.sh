@@ -54,7 +54,7 @@ mkdir -p ~/.config/{bspwm,sxhkd} || handle_error
 if [ -d "/usr/share/doc/bspwm/examples/" ]; then
     sudo cp /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/ || handle_error
     sudo cp /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/ || handle_error
-    chmod +x ~/.config/bspwm/bspwmrc || handle_error
+    sudo chmod +x ~/.config/bspwm/bspwmrc || handle_error
 else
     echo -e "${yellowColour}[!] No se encontraron los archivos de ejemplo en /usr/share/doc/bspwm/examples/${endColour}"
 fi
