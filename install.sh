@@ -24,7 +24,18 @@ sudo apt update && sudo apt install -y \
     build-essential git vim libxcb-util0-dev libxcb-ewmh-dev \
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev \
     libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev \
-    libxcb-xrm-dev || handle_error
+    libxcb-xrm-dev apt install meson libxext-dev libxcb1-dev libxcb-damage0-dev \
+    libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev \
+    libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev \ 
+    libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev \
+    libxcb-glx0-dev cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev \
+    libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev \
+    libxcb-ewmh-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev \
+    libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev || handle_error 
+
+# Instalar dependencias de picom
+echo -e "${blueColour}[+] Instalando dependencias de picom...${endColour}"
+sudo apt update && sudo  || handle_error
 
 # Clonar y compilar bspwm
 echo -e "${blueColour}[+] Clonando y compilando bspwm...${endColour}"
@@ -80,13 +91,56 @@ if [ -d ~/auto_bspwm ]; then
     
     # Fuentes Hack Nerd
     if [ -d ~/auto_bspwm/Hack ]; then
-        sudo mkdir -p /usr/share/fonts/truetype/Hack || handle_error
-        sudo cp -r ~/auto_bspwm/Hack/* /usr/share/fonts/truetype/Hack/ || handle_error
+        sudo cp -r ~/auto_bspwm/Hack/* /usr/share/fonts/Hack/ || handle_error
         sudo fc-cache -fv || handle_error
     fi
 else
     echo -e "${yellowColour}[!] No se encontró el directorio auto_bspwm con configuraciones personalizadas${endColour}"
 fi
+
+# Instalar polybar
+echo -e "${blueColour}[+] Instalando polybar...${endColour}"
+cd ~ || handle_error
+git clone --recursive https://github.com/polybar/polybar || handle_error
+cd polybar || handle_error
+mkdir build || handle_error
+cd build || handle_error
+cmake .. || handle_error
+make -j$(nproc) || handle_error
+sudo make install || handle_error
+
+# Configurar polybar
+echo -e "${blueColour}[+] Configurando polybar...${endColour}"
+cd ~ || handle_error
+git clone https://github.com/VaughnValle/blue-sky.git || handle_error
+mkdir ~/.config/polybar
+cd ~/Downloads/blue-sky/polybar/
+cp * -r ~/.config/polybar
+echo '~/.config/polybar/launch.sh &' >> ~/.config/bspwm/bspwmrc 
+cd fonts
+sudo cp * /usr/share/fonts/truetype/
+fc-cache -v
+
+# Instalar picom
+echo -e "${blueColour}[+] Instalando picom...${endColour}"
+git clone https://github.com/ibhagwan/picom.git
+cd picom/
+git submodule update --init --recursive
+meson --buildtype=release . build
+ninja -C build
+sudo ninja -C build install
+
+# Configurar picom
+echo -e "${blueColour}[+] Configurando picom...${endColour}"
+mkdir -p ~/.config/picom || handle_error
+cd ~/.config/picom || handle_error
+  if [ -f ~/auto_bspwm/picom.conf ]; then
+        cp -f ~/auto_bspwm/picom.conf ~/.config/picom|| handle_error
+  fi
+
+# Instalar rofi
+echo -e "${blueColour}[+] Instalando rofi...${endColour}"
+sudo apt install -y rofi || handle_error
 
 echo -e "\n${greenColour}[+] Instalación completada con éxito!${endColour}"
 echo -e "${blueColour}[*] Para iniciar bspwm, cierra sesión y seleccionalo en el gestor de ventanas${endColour}"
