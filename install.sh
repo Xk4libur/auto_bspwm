@@ -108,7 +108,6 @@ echo -e "${blueColour}[+] Configurando picom...${endColour}"
 mkdir -p ~/.config/picom
 sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
 
-
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
 sudo apt install -y rofi
@@ -120,9 +119,6 @@ sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
 mkdir -p ~/.config/bin
 sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
 
-# Limpiar archivos temporales
-echo -e "${blueColour}[+] Limpiando archivos temporales...${endColour}"
-rm -rf ~/bspwm ~/sxhkd ~/polybar ~/picom ~/blue-sky
 
 echo -e "\n${greenColour}[+] Instalación completada con éxito!${endColour}"
 echo -e "${blueColour}[*] Para iniciar bspwm, cierra sesión y seleccionalo en el gestor de ventanas${endColour}"
