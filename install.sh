@@ -90,7 +90,7 @@ if [ -d ~/auto_bspwm ]; then
     
     # Fuentes Hack Nerd
     if [ -d ~/auto_bspwm/Hack ]; then
-        sudo cp -r ~/auto_bspwm/Hack/* /usr/share/fonts/Hack/ || handle_error
+        sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/ || handle_error
         sudo fc-cache -fv || handle_error
     fi
 else
