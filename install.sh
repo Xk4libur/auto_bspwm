@@ -40,7 +40,7 @@ sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
 echo -e "${blueColour}[+] Clonando y compilando bspwm...${endColour}"
 cd ~/Downloads
 git clone https://github.com/baskerville/bspwm.git
-cd bspwm
+cd bspwm/
 make
 sudo make install
 sudo apt install -y bspwm
@@ -49,7 +49,7 @@ sudo apt install -y bspwm
 echo -e "${blueColour}[+] Clonando y compilando sxhkd...${endColour}"
 cd ~/Downloads
 git clone https://github.com/baskerville/sxhkd.git
-cd sxhkd
+cd sxhkd/
 make
 sudo make install
 
@@ -62,6 +62,7 @@ echo -e "${blueColour}[+] Copiando configuraciones personalizadas...${endColour}
 
 # bspwm
 cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
+chmod +x ~/.config/bspwm/bspwmrc
 
 # sxhkd
 cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
@@ -78,7 +79,7 @@ sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
 echo -e "${blueColour}[+] Instalando polybar...${endColour}"
 cd ~/Downloads
 git clone --recursive https://github.com/polybar/polybar
-cd polybar
+cd polybar/
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
@@ -92,7 +93,7 @@ mkdir -p ~/.config/polybar
 cd ~/Downloads/blue-sky/polybar/
 cp -r * ~/.config/polybar/
 echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
-cd fonts
+cd fonts/
 sudo cp * /usr/share/fonts/truetype/
 fc-cache -v
 
