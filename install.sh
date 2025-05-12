@@ -46,6 +46,7 @@ chmod +x ~/.config/bspwm/bspwmrc
 
 # Sustituir el archivo de configuración de sxhkd
 cp -f ~/auto_bspwm/sxhdrc_new ~/.config/sxhkd/sxhkdrc
+mv ~/.config/sxhkd/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
 
 # Instalar kitty
 sudo apt install kitty -y
