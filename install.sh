@@ -12,16 +12,16 @@ grayColour="\033[0;37m\033[1m"
 
 echo -e "\n${greenColour}bspwm installer for Kali Linux${endColour} - ${yellowColour}Made by xk4libur${endColour}\n"
 
-# Función para manejar errores
-handle_error() {
-    echo -e "${redColour}[ERROR]${endColour} Algo salió mal en el paso anterior"
+# Verificar si el sistema operativo es Kali Linux
+if ! grep -qi "kali" /etc/os-release; then
+    echo -e "${yellowColour}[!] Este script está diseñado para Kali Linux${endColour}"
     exit 1
-}
+fi
 
 # Instalar dependencias
 echo -e "${blueColour}[+] Instalando dependencias...${endColour}"
-sudo apt update && sudo apt install -y \
-    build-essential git vim cmake cmake-data pkg-config meson \
+sudo apt update
+sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
     python3-sphinx python3-xcbgen xcb-proto \
     libxcb1-dev libxcb-util0-dev libxcb-ewmh-dev \
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev \
@@ -34,27 +34,27 @@ sudo apt update && sudo apt install -y \
     libgl1-mesa-dev libevdev-dev uthash-dev \
     libev-dev libcairo2-dev libasound2-dev libpulse-dev \
     libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev \
-    libnl-genl-3-dev || handle_error
+    libnl-genl-3-dev
 
 # Clonar y compilar bspwm
 echo -e "${blueColour}[+] Clonando y compilando bspwm...${endColour}"
-cd ~ || handle_error
-git clone https://github.com/baskerville/bspwm.git || handle_error
-cd bspwm || handle_error
-make || handle_error
-sudo make install || handle_error
+cd ~
+git clone https://github.com/baskerville/bspwm.git
+cd bspwm
+make
+sudo make install
 
 # Clonar y compilar sxhkd
 echo -e "${blueColour}[+] Clonando y compilando sxhkd...${endColour}"
-cd ~ || handle_error
-git clone https://github.com/baskerville/sxhkd.git || handle_error
-cd sxhkd || handle_error
-make || handle_error
-sudo make install || handle_error
+cd ~
+git clone https://github.com/baskerville/sxhkd.git
+cd sxhkd
+make
+sudo make install
 
 # Configuración de bspwm y sxhkd
 echo -e "${blueColour}[+] Configurando bspwm y sxhkd...${endColour}"
-mkdir -p ~/.config/{bspwm,sxhkd} || handle_error
+mkdir -p ~/.config/{bspwm,sxhkd}
 
 # Copiar configuraciones personalizadas si existen
 if [ -d ~/auto_bspwm ]; then
@@ -62,28 +62,28 @@ if [ -d ~/auto_bspwm ]; then
 
     # bspwm
     if [ -f ~/auto_bspwm/bspwmrc_new ]; then
-        cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc || handle_error
+        cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
     fi
 
     # sxhkd
     if [ -f ~/auto_bspwm/sxhkdrc_new ]; then
-        cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc || handle_error
+        cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
     fi
 
     # kitty
-    sudo apt install -y kitty || handle_error
-    mkdir -p ~/.config/kitty || handle_error
+    sudo apt install -y kitty
+    mkdir -p ~/.config/kitty
     if [ -f ~/auto_bspwm/kitty.conf ]; then
-        cp -f ~/auto_bspwm/kitty.conf ~/.config/kitty/ || handle_error
+        cp -f ~/auto_bspwm/kitty.conf ~/.config/kitty/
     fi
     if [ -f ~/auto_bspwm/color.ini ]; then
-        cp -f ~/auto_bspwm/color.ini ~/.config/kitty/ || handle_error
+        cp -f ~/auto_bspwm/color.ini ~/.config/kitty/
     fi
 
     # Fuentes Hack Nerd
     if [ -d ~/auto_bspwm/Hack ]; then
-        sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/ || handle_error
-        sudo fc-cache -fv || handle_error
+        sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
+        sudo fc-cache -fv
     fi
 else
     echo -e "${yellowColour}[!] No se encontró el directorio auto_bspwm con configuraciones personalizadas${endColour}"
@@ -91,45 +91,45 @@ fi
 
 # Instalar polybar
 echo -e "${blueColour}[+] Instalando polybar...${endColour}"
-cd ~ || handle_error
-git clone --recursive https://github.com/polybar/polybar || handle_error
-cd polybar || handle_error
-mkdir build && cd build || handle_error
-cmake .. || handle_error
-make -j$(nproc) || handle_error
-sudo make install || handle_error
+cd ~
+git clone --recursive https://github.com/polybar/polybar
+cd polybar
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+sudo make install
 
 # Configurar polybar
 echo -e "${blueColour}[+] Configurando polybar...${endColour}"
-cd ~ || handle_error
-git clone https://github.com/VaughnValle/blue-sky.git || handle_error
-mkdir -p ~/.config/polybar || handle_error
-cd ~/blue-sky/polybar/ || handle_error
-cp -r * ~/.config/polybar || handle_error
-chmod +x ~/.config/polybar/launch.sh || handle_error
-echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc || handle_error
-cd fonts || handle_error
-sudo cp *.ttf /usr/share/fonts/truetype/ || handle_error
-fc-cache -v || handle_error
+cd ~
+git clone https://github.com/VaughnValle/blue-sky.git
+mkdir -p ~/.config/polybar
+cd ~/blue-sky/polybar/
+cp -r * ~/.config/polybar
+chmod +x ~/.config/polybar/launch.sh
+echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
+cd fonts
+sudo cp *.ttf /usr/share/fonts/truetype/
+fc-cache -v
 
 # Instalar picom
 echo -e "${blueColour}[+] Instalando picom...${endColour}"
-cd ~ || handle_error
-git clone https://github.com/ibhagwan/picom.git || handle_error
-cd picom/ || handle_error
-git submodule update --init --recursive || handle_error
-meson --buildtype=release . build || handle_error
-ninja -C build || handle_error
-sudo ninja -C build install || handle_error
+cd ~
+git clone https://github.com/ibhagwan/picom.git
+cd picom/
+git submodule update --init --recursive
+meson --buildtype=release . build
+ninja -C build
+sudo ninja -C build install
 
 # Configurar picom
 echo -e "${blueColour}[+] Configurando picom...${endColour}"
-mkdir -p ~/.config/picom || handle_error
-cp -f ~/auto_bspwm/picom.conf ~/.config/picom || handle_error
+mkdir -p ~/.config/picom
+cp -f ~/auto_bspwm/picom.conf ~/.config/picom
 
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
-sudo apt install -y rofi || handle_error
+sudo apt install -y rofi
 
 # Limpiar archivos temporales
 echo -e "${blueColour}[+] Limpiando archivos temporales...${endColour}"
