@@ -121,7 +121,7 @@ sudo apt install -y rofi
 cp -r ~/auto_bspwm/polybar/ ~/.config/polybar/
 
 # Meter los nuevos archivos binarios
-mkdir -p ~./config/bin
+mkdir -p ~/.config/bin
 cp -r ~/auto_bspwm/bin/* ~/.config/bin/
 
 # Limpiar archivos temporales
