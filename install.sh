@@ -36,10 +36,6 @@ sudo apt update && sudo apt install -y \
     libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev \
     libnl-genl-3-dev || handle_error
 
-# Instalar dependencias de picom
-echo -e "${blueColour}[+] Instalando dependencias de picom...${endColour}"
-sudo apt update && sudo  || handle_error
-
 # Clonar y compilar bspwm
 echo -e "${blueColour}[+] Clonando y compilando bspwm...${endColour}"
 cd ~ || handle_error
