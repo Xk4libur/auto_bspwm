@@ -12,6 +12,10 @@ grayColour="\033[0;37m\033[1m"
 
 echo -e "\n${greenColour}bspwm installer for Kali Linux${endColour} - ${yellowColour}Made by xk4libur${endColour}\n"
 
+# Crear link simbólico 
+echo -e "${blueColour}[+] Creando link simbólico de la zshrc...${endColour}"
+sudo rm /root/.zshrc
+sudo ln -s /home/$USER/.zshrc /root/.zshrc
 
 # Instalar dependencias
 echo -e "${blueColour}[+] Instalando dependencias...${endColour}"
@@ -115,9 +119,14 @@ echo -e "${blueColour}[+] Configurando picom...${endColour}"
 mkdir -p ~/.config/picom
 sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
 
+# Copiar archivos de la powerlevel10k
+sudo mv ~/auto_bspwm/.p10k_new.zsh ~/.p10k.zsh
+sudo mv ~/auto_bspwm/.p10k-root_new.zsh ~/root/.p10k.zsh
+
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
 sudo apt install -y rofi
+
 
 # Meter los nuevos archivos de la polybar
 sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
