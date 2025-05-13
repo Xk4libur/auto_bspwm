@@ -103,6 +103,13 @@ meson --buildtype=release . build
 ninja -C build
 sudo ninja -C build install
 
+# Instalando p10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+
+# Instalando p10k root
+sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k
+
 # Configurar picom
 echo -e "${blueColour}[+] Configurando picom...${endColour}"
 mkdir -p ~/.config/picom
