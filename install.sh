@@ -121,7 +121,7 @@ sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
 
 # Copiar archivos de la powerlevel10k
 sudo mv ~/auto_bspwm/.p10k_new.zsh ~/.p10k.zsh
-sudo mv ~/auto_bspwm/.p10k-root_new.zsh ~/root/.p10k.zsh
+sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
 
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
