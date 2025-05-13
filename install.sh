@@ -69,8 +69,8 @@ cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
 # kitty
 sudo apt install -y kitty
 mkdir -p ~/.config/kitty
-sudo mv ~/auto_bspwm/kitty.conf ~/.config/kitty/
-sudo mv ~/auto_bspwm/color.ini ~/.config/kitty/
+sudo mv ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
+sudo mv ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
 sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
 
 
@@ -120,13 +120,16 @@ mkdir -p ~/.config/picom
 sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
 
 # Copiar archivos de la powerlevel10k
-sudo mv ~/auto_bspwm/.p10k_new.zsh /home/$USER/.p10k.zsh
+sudo mv ~/auto_bspwm/.p10k-root_new.zsh /home/$USER/.p10k.zsh
 sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
 
 # Instalar rofi
 echo -e "${blueColour}[+] Instalando rofi...${endColour}"
 sudo apt install -y rofi
 
+# Instalar micro
+echo -e "${blueColour}[+] Instalando micro...${endColour}"
+sudo apt install -y micro
 
 # Meter los nuevos archivos de la polybar
 sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
@@ -135,6 +138,16 @@ sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
 mkdir -p ~/.config/bin
 sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
 
+# Meter batcat y lsd
+sudo mv ~/auto_bspwm/bat_0.25.0_amd64.deb /home/$USER/Desktop/
+sudo mv ~/auto_bspwm/lsd_1.1.5_amd64.deb /home/$USER/Desktop/
+cd ~/Desktop
+sudo dpkg -i bat_0.25.0_amd64.deb lsd_1.1.5_amd64.deb
+sudo mv ~/auto_bspwm/zsh/.zshrc /home/$USER/.zshrc
+sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
+
+# Configuramos el Tema de Rofi
+rofi-theme-selector
 
 echo -e "\n${greenColour}[+] Instalación completada con éxito!${endColour}"
 echo -e "${blueColour}[*] Para iniciar bspwm, cierra sesión y seleccionalo en el gestor de ventanas${endColour}"
