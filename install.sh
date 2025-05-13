@@ -145,6 +145,8 @@ cd ~/Desktop
 sudo dpkg -i bat_0.25.0_amd64.deb lsd_1.1.5_amd64.deb
 sudo mv ~/auto_bspwm/zsh/.zshrc /home/$USER/.zshrc
 sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
+sudo rm /home/$USER/Desktop/bat_0.25.0_amd64.deb
+sudo rm /home/$USER/Desktop/lsd_1.1.5_amd64.deb
 
 # Configuramos el Tema de Rofi
 rofi-theme-selector
