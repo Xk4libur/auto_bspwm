@@ -148,12 +148,11 @@ sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
 sudo rm /home/$USER/Desktop/bat_0.25.0_amd64.deb
 sudo rm /home/$USER/Desktop/lsd_1.1.5_amd64.deb
 
+# Configuramos el Tema de Rofi
+rofi-theme-selector
+
 # Corregir problemas con el compaudit de la zsh
 echo -e "${blueColour}[+] Eliminando archivos innecesarios de la zsh...${endColour}"
 sudo rm -rf /usr/local/share/zsh/site-functions/_bspc
 
-# Configuramos el Tema de Rofi
-rofi-theme-selector
-
-echo -e "\n${greenColour}[+] Instalación completada con éxito!${endColour}"
-echo -e "${blueColour}[*] Para iniciar bspwm, cierra sesión y seleccionalo en el gestor de ventanas${endColour}"
+echo -e "\n${greenColour}[+] BSPWM instalado, a darle!${endColour}"
