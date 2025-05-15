@@ -148,6 +148,10 @@ sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
 sudo rm /home/$USER/Desktop/bat_0.25.0_amd64.deb
 sudo rm /home/$USER/Desktop/lsd_1.1.5_amd64.deb
 
+# Corregir problemas con el compaudit de la zsh
+echo -e "${blueColour}[+] Eliminando archivos innecesarios de la zsh...${endColour}"
+sudo rm -rf /usr/local/share/zsh/site-functions/_bspc
+
 # Configuramos el Tema de Rofi
 rofi-theme-selector
 
