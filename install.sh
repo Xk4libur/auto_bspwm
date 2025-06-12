@@ -28,8 +28,7 @@ crear_symlink_zshrc() {
 }
 
 instalar_dependencias() {
-    info "Instalando dependencias..."
-    cd 
+    info "Instalando dependencias..." 
     sudo apt update &>/dev/null
     sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
         python3-sphinx python3-xcbgen xcb-proto \
