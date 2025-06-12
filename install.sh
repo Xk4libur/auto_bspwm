@@ -79,9 +79,9 @@ install_kitty() {
   status "Instalando y configurando kitty"
   run sudo apt install -y kitty
   mkdir -p ~/.config/kitty
-  cp -f ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
-  cp -f ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
-  run sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
+  cp  ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
+  cp  ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
+  sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
   ok "kitty instalado y configurado"
 }
 
