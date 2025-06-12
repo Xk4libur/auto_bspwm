@@ -53,30 +53,31 @@ install_dependencies() {
 
 clone_and_build_bspwm() {
   status "Clonando y compilando bspwm"
-  cd ~/Downloads
+  run cd ~/Downloads
   run git clone https://github.com/baskerville/bspwm.git
-  cd bspwm
-  run make && sudo make install
+  run cd bspwm
+  run make && run sudo make install
   run sudo apt install -y bspwm
   ok "bspwm instalado"
 }
 
 clone_and_build_sxhkd() {
   status "Clonando y compilando sxhkd"
-  cd ~/Downloads
+  run cd ~/Downloads
   run git clone https://github.com/baskerville/sxhkd.git
-  cd sxhkd
-  run make && sudo make install
+  run cd sxhkd
+  run make && run sudo make install
   ok "sxhkd instalado"
 }
 
 configure_bspwm_sxhkd() {
   status "Configurando bspwm y sxhkd"
-  mkdir -p ~/.config/{bspwm,sxhkd}
-  if cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc; then
-    chmod +x ~/.config/bspwm/bspwmrc
+  run mkdir -p ~/.config/{bspwm,sxhkd}
+  if [ -f ~/auto_bspwm/bspwmrc_new ]; then
+    run cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
+    run chmod +x ~/.config/bspwm/bspwmrc
   else
-    echo -e "${red}[✖] No se pudo copiar bspwmrc_new${end}"
+    echo -e "${yellow}[!] bspwmrc_new no encontrado, se omitió la copia${end}"
   fi
   run cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
   ok "bspwm y sxhkd configurados"
@@ -85,7 +86,7 @@ configure_bspwm_sxhkd() {
 install_kitty() {
   status "Instalando y configurando kitty"
   run sudo apt install -y kitty
-  mkdir -p ~/.config/kitty
+  run mkdir -p ~/.config/kitty
   run sudo mv ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
   run sudo mv ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
   run sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
@@ -94,39 +95,36 @@ install_kitty() {
 
 install_polybar() {
   status "Instalando polybar"
-  cd ~/Downloads
+  run cd ~/Downloads
   run git clone --recursive https://github.com/polybar/polybar
-  cd polybar
-  mkdir build && cd build
-  if cmake .. && make -j$(nproc); then
-    sudo make install
-  else
-    echo -e "${red}[✖] Error al compilar Polybar${end}"
-  fi
+  run cd polybar
+  run mkdir build
+  run cd build
+  run cmake .. && run make -j$(nproc) && run sudo make install
 
   status "Configurando polybar"
-  cd ~/Downloads
+  run cd ~/Downloads
   run git clone https://github.com/VaughnValle/blue-sky.git
-  mkdir -p ~/.config/polybar
-  cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
-  echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
-  sudo cp ~/Downloads/blue-sky/polybar/fonts/* /usr/share/fonts/truetype/
+  run mkdir -p ~/.config/polybar
+  run cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
+  run echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
+  run sudo cp ~/Downloads/blue-sky/polybar/fonts/* /usr/share/fonts/truetype/
   run fc-cache -v
   ok "polybar instalado y configurado"
 }
 
 install_picom() {
   status "Instalando picom"
-  cd ~/Downloads
+  run cd ~/Downloads
   run git clone https://github.com/ibhagwan/picom.git
-  cd picom
+  run cd picom
   run git submodule update --init --recursive
   run meson --buildtype=release . build
   run ninja -C build
-  sudo ninja -C build install
+  run sudo ninja -C build install
 
   status "Configurando picom"
-  mkdir -p ~/.config/picom
+  run mkdir -p ~/.config/picom
   run sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
   ok "picom instalado y configurado"
 }
@@ -139,8 +137,8 @@ install_powerlevel10k() {
   status "Configurando powerlevel10k para root"
   run sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k
   run sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
-  echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' | sudo tee -a /root/.zshrc
-  echo '[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh' | sudo tee -a /root/.zshrc
+  echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' | sudo tee -a /root/.zshrc > /dev/null
+  echo '[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh' | sudo tee -a /root/.zshrc > /dev/null
   run sudo chsh -s /bin/zsh root
   ok "powerlevel10k instalado y configurado"
 }
@@ -149,11 +147,11 @@ install_utilities() {
   status "Instalando herramientas adicionales"
   run sudo apt install -y rofi micro
   run sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
-  mkdir -p ~/.config/bin
+  run mkdir -p ~/.config/bin
   run sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
   run sudo mv ~/auto_bspwm/bat_0.25.0_amd64.deb ~/Desktop/
   run sudo mv ~/auto_bspwm/lsd_1.1.5_amd64.deb ~/Desktop/
-  cd ~/Desktop
+  run cd ~/Desktop
   run sudo dpkg -i bat_0.25.0_amd64.deb lsd_1.1.5_amd64.deb
   run sudo mv ~/auto_bspwm/zsh/.zshrc ~/.zshrc
   run sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
