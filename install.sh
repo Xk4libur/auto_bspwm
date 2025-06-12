@@ -53,10 +53,8 @@ install_dependencies() {
 
 clone_and_build_bspwm() {
   status "Clonando y compilando bspwm"
-  run cd ~/Downloads
-  run git clone https://github.com/baskerville/bspwm.git
-  run cd bspwm
-  run make && run sudo make install
+  run cd ~/Downloads && git clone https://github.com/baskerville/bspwm.git
+  run cd ~/Downloads/bspwm && make && sudo make install
   run sudo apt install -y bspwm
   ok "bspwm instalado"
 }
@@ -192,4 +190,3 @@ finalize_setup
 
 echo -e "\n${green}[✔] BSPWM instalado y configurado correctamente!${end}"
 
-}
