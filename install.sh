@@ -47,7 +47,7 @@ install_dependencies() {
     libgl1-mesa-dev libevdev-dev uthash-dev \
     libev-dev libcairo2-dev libasound2-dev libpulse-dev \
     libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev \
-    libnl-genl-3-dev
+    libnl-genl-3-dev ninja-build python3
   ok "Dependencias instaladas"
 }
 
@@ -73,8 +73,11 @@ clone_and_build_sxhkd() {
 configure_bspwm_sxhkd() {
   status "Configurando bspwm y sxhkd"
   mkdir -p ~/.config/{bspwm,sxhkd}
-  run cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
-  chmod +x ~/.config/bspwm/bspwmrc
+  if cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc; then
+    chmod +x ~/.config/bspwm/bspwmrc
+  else
+    echo -e "${red}[✖] No se pudo copiar bspwmrc_new${end}"
+  fi
   run cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
   ok "bspwm y sxhkd configurados"
 }
@@ -95,9 +98,11 @@ install_polybar() {
   run git clone --recursive https://github.com/polybar/polybar
   cd polybar
   mkdir build && cd build
-  run cmake ..
-  run make -j$(nproc)
-  sudo make install
+  if cmake .. && make -j$(nproc); then
+    sudo make install
+  else
+    echo -e "${red}[✖] Error al compilar Polybar${end}"
+  fi
 
   status "Configurando polybar"
   cd ~/Downloads
@@ -136,6 +141,7 @@ install_powerlevel10k() {
   run sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
   echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' | sudo tee -a /root/.zshrc
   echo '[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh' | sudo tee -a /root/.zshrc
+  run sudo chsh -s /bin/zsh root
   ok "powerlevel10k instalado y configurado"
 }
 
