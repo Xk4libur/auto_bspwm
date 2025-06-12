@@ -191,3 +191,5 @@ install_utilities
 finalize_setup
 
 echo -e "\n${green}[✔] BSPWM instalado y configurado correctamente!${end}"
+
+}
