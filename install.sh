@@ -13,7 +13,15 @@ error() { echo -e "${red}[✘]${reset} $1"; }
 
 run_cmd() {
     "$@" &>/dev/null
-    [[ $? -eq 0 ]] && return 0 || { error "Fallo al ejecutar: $*"; exit 1; }
+    [[ $? -eq 0 ]] || { error "Fallo al ejecutar: $*"; exit 1; }
+}
+
+verificar_archivo() {
+    [[ -f "$1" ]] || { error "Archivo no encontrado: $1"; exit 1; }
+}
+
+verificar_directorio() {
+    [[ -d "$1" ]] || { error "Directorio no encontrado: $1"; exit 1; }
 }
 
 # === Inicio ===
@@ -37,7 +45,7 @@ instalar_dependencias() {
         libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev \
         libevdev-dev uthash-dev libev-dev libcairo2-dev \
         libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev \
-        libcurl4-openssl-dev libnl-genl-3-dev kitty rofi micro &>/dev/null
+        libcurl4-openssl-dev libnl-genl-3-dev kitty rofi rofi-themes micro &>/dev/null
 }
 
 compilar_proyecto() {
@@ -61,6 +69,8 @@ instalar_bspwm_sxhkd() {
 configurar_bspwm_sxhkd() {
     info "Configurando bspwm y sxhkd..."
     mkdir -p ~/.config/{bspwm,sxhkd}
+    verificar_archivo ~/auto_bspwm/bspwmrc_new
+    verificar_archivo ~/auto_bspwm/sxhkdrc_new
     cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc && chmod +x ~/.config/bspwm/bspwmrc
     cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
 }
@@ -68,7 +78,9 @@ configurar_bspwm_sxhkd() {
 instalar_kitty() {
     info "Configurando kitty..."
     mkdir -p ~/.config/kitty
+    verificar_directorio ~/auto_bspwm/kitty
     sudo mv ~/auto_bspwm/kitty/*.conf ~/.config/kitty/
+    verificar_directorio ~/auto_bspwm/Hack
     sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
 }
 
@@ -84,11 +96,17 @@ instalar_polybar() {
     info "Configurando polybar..."
     cd ~/Downloads || exit
     git clone https://github.com/VaughnValle/blue-sky.git &>/dev/null
+    verificar_directorio ~/Downloads/blue-sky/polybar
     mkdir -p ~/.config/polybar
     cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
-    sudo cp ~/Downloads/blue-sky/fonts/* /usr/share/fonts/truetype/
-    fc-cache -f &>/dev/null
+
+    if [[ -d ~/Downloads/blue-sky/fonts ]]; then
+        sudo cp ~/Downloads/blue-sky/fonts/* /usr/share/fonts/truetype/
+        fc-cache -f &>/dev/null
+    else
+        error "No se encontraron fuentes en blue-sky/fonts"
+    fi
 }
 
 instalar_picom() {
@@ -103,6 +121,7 @@ instalar_picom() {
 
     info "Configurando picom..."
     mkdir -p ~/.config/picom
+    verificar_archivo ~/auto_bspwm/picom.conf
     sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
 }
 
@@ -110,18 +129,23 @@ instalar_p10k() {
     info "Instalando Powerlevel10k..."
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k &>/dev/null
     echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+
     sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k &>/dev/null
-    sudo mv ~/auto_bspwm/.p10k-root_new.zsh ~/.p10k.zsh
+    verificar_archivo ~/auto_bspwm/.p10k-root_new.zsh
     sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
 }
 
 configurar_binarios_y_temas() {
     info "Instalando binarios, rofi y micro..."
-    mkdir -p ~/.config/bin
+    mkdir -p ~/.config/bin ~/.config/polybar
+    verificar_directorio ~/auto_bspwm/polybar
+    verificar_directorio ~/auto_bspwm/bin
+    verificar_archivo ~/auto_bspwm/zsh/.zshrc
+
     sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
     sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
-    sudo mv ~/auto_bspwm/zsh/.zshrc ~/
-    sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
+    mv ~/auto_bspwm/zsh/.zshrc ~/
+    sudo cp ~/.zshrc /root/.zshrc
 
     info "Instalando bat y lsd..."
     mv ~/auto_bspwm/*.deb ~/Desktop/
@@ -147,6 +171,6 @@ configurar_binarios_y_temas
 limpiar_archivos_zsh
 
 # Tema rofi (último porque requiere interacción)
-rofi-theme-selector
+command -v rofi-theme-selector &>/dev/null && rofi-theme-selector || error "rofi-theme-selector no está disponible"
 
 success "Instalación y configuración completadas correctamente."
