@@ -82,7 +82,8 @@ instalar_polybar() {
     sudo make install &>/dev/null
 
     info "Configurando polybar..."
-    git clone https://github.com/VaughnValle/blue-sky.git ~/Downloads/blue-sky &>/dev/null
+    cd ~/Downloads || exit
+    git clone https://github.com/VaughnValle/blue-sky.git &>/dev/null
     mkdir -p ~/.config/polybar
     cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
