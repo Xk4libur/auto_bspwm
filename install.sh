@@ -26,8 +26,9 @@ print_title() {
 
 create_symlinks() {
   status "Creando link simbólico de la zshrc"
+  user_home="/home/${SUDO_USER:-$USER}"
   run sudo rm -f /root/.zshrc
-  run sudo ln -s /home/$USER/.zshrc /root/.zshrc
+  run sudo ln -s "$user_home/.zshrc" /root/.zshrc
   ok "Link creado"
 }
 
@@ -53,18 +54,20 @@ install_dependencies() {
 
 clone_and_build_bspwm() {
   status "Clonando y compilando bspwm"
-  run cd ~/Downloads && git clone https://github.com/baskerville/bspwm.git
-  run cd ~/Downloads/bspwm && make && sudo make install
-  run sudo apt install -y bspwm
+  mkdir -p ~/Downloads && cd ~/Downloads || exit 1
+  git clone https://github.com/baskerville/bspwm.git > /dev/null 2>&1
+  cd bspwm || exit 1
+  make > /dev/null 2>&1 && sudo make install > /dev/null 2>&1
+  sudo apt install -y bspwm > /dev/null 2>&1
   ok "bspwm instalado"
 }
 
 clone_and_build_sxhkd() {
   status "Clonando y compilando sxhkd"
-  run cd ~/Downloads
-  run git clone https://github.com/baskerville/sxhkd.git
-  run cd sxhkd
-  run make && run sudo make install
+  cd ~/Downloads || exit 1
+  git clone https://github.com/baskerville/sxhkd.git > /dev/null 2>&1
+  cd sxhkd || exit 1
+  make > /dev/null 2>&1 && sudo make install > /dev/null 2>&1
   ok "sxhkd instalado"
 }
 
@@ -96,75 +99,76 @@ install_kitty() {
   status "Instalando y configurando kitty"
   run sudo apt install -y kitty
   run mkdir -p ~/.config/kitty
-  run sudo mv ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
-  run sudo mv ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
+  run mv ~/auto_bspwm/kitty/kitty.conf ~/.config/kitty/
+  run mv ~/auto_bspwm/kitty/color.ini ~/.config/kitty/
   run sudo cp -r ~/auto_bspwm/Hack/ /usr/share/fonts/
   ok "kitty instalado y configurado"
 }
 
 install_polybar() {
   status "Instalando polybar"
-  run cd ~/Downloads
-  run git clone --recursive https://github.com/polybar/polybar
-  run cd polybar
-  run mkdir build
-  run cd build
-  run cmake .. && run make -j$(nproc) && run sudo make install
+  cd ~/Downloads || exit 1
+  git clone --recursive https://github.com/polybar/polybar > /dev/null 2>&1
+  cd polybar || exit 1
+  mkdir build
+  cd build || exit 1
+  cmake .. > /dev/null 2>&1 && make -j$(nproc) > /dev/null 2>&1 && sudo make install > /dev/null 2>&1
 
   status "Configurando polybar"
-  run cd ~/Downloads
-  run git clone https://github.com/VaughnValle/blue-sky.git
-  run mkdir -p ~/.config/polybar
-  run cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
-  run echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
-  run sudo cp ~/Downloads/blue-sky/polybar/fonts/* /usr/share/fonts/truetype/
-  run fc-cache -v
+  cd ~/Downloads || exit 1
+  git clone https://github.com/VaughnValle/blue-sky.git > /dev/null 2>&1
+  mkdir -p ~/.config/polybar
+  cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
+  echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
+  sudo cp ~/Downloads/blue-sky/polybar/fonts/* /usr/share/fonts/truetype/
+  fc-cache -v > /dev/null 2>&1
   ok "polybar instalado y configurado"
 }
 
 install_picom() {
   status "Instalando picom"
-  run cd ~/Downloads
-  run git clone https://github.com/ibhagwan/picom.git
-  run cd picom
-  run git submodule update --init --recursive
-  run meson --buildtype=release . build
-  run ninja -C build
-  run sudo ninja -C build install
+  cd ~/Downloads || exit 1
+  git clone https://github.com/ibhagwan/picom.git > /dev/null 2>&1
+  cd picom || exit 1
+  git submodule update --init --recursive > /dev/null 2>&1
+  meson --buildtype=release . build > /dev/null 2>&1
+  ninja -C build > /dev/null 2>&1
+  sudo ninja -C build install > /dev/null 2>&1
 
   status "Configurando picom"
-  run mkdir -p ~/.config/picom
-  run sudo mv ~/auto_bspwm/picom.conf ~/.config/picom/
+  mkdir -p ~/.config/picom
+  mv ~/auto_bspwm/picom.conf ~/.config/picom/
   ok "picom instalado y configurado"
 }
 
 install_powerlevel10k() {
   status "Instalando powerlevel10k"
-  run git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
-  echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k > /dev/null 2>&1
+  grep -qxF 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' ~/.zshrc || \
+    echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
   status "Configurando powerlevel10k para root"
-  run sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k
-  run sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
-  echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' | sudo tee -a /root/.zshrc > /dev/null
-  echo '[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh' | sudo tee -a /root/.zshrc > /dev/null
-  run sudo chsh -s /bin/zsh root
+  sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k > /dev/null 2>&1
+  sudo mv ~/auto_bspwm/.p10k-root_new.zsh /root/.p10k.zsh
+  sudo tee -a /root/.zshrc > /dev/null <<< 'source ~/.powerlevel10k/powerlevel10k.zsh-theme'
+  sudo tee -a /root/.zshrc > /dev/null <<< '[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh'
+  sudo chsh -s /bin/zsh root
   ok "powerlevel10k instalado y configurado"
 }
 
 install_utilities() {
   status "Instalando herramientas adicionales"
-  run sudo apt install -y rofi micro
-  run sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
-  run mkdir -p ~/.config/bin
-  run sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
-  run sudo mv ~/auto_bspwm/bat_0.25.0_amd64.deb ~/Desktop/
-  run sudo mv ~/auto_bspwm/lsd_1.1.5_amd64.deb ~/Desktop/
-  run cd ~/Desktop
-  run sudo dpkg -i bat_0.25.0_amd64.deb lsd_1.1.5_amd64.deb
-  run sudo mv ~/auto_bspwm/zsh/.zshrc ~/.zshrc
-  run sudo mv ~/auto_bspwm/zsh/.zshrc /root/.zshrc
-  run sudo rm ~/Desktop/bat_0.25.0_amd64.deb ~/Desktop/lsd_1.1.5_amd64.deb
+  sudo apt install -y rofi micro > /dev/null 2>&1
+  mv ~/auto_bspwm/polybar/* ~/.config/polybar/
+  mkdir -p ~/.config/bin
+  mv ~/auto_bspwm/bin/* ~/.config/bin/
+  mv ~/auto_bspwm/bat_0.25.0_amd64.deb ~/Desktop/
+  mv ~/auto_bspwm/lsd_1.1.5_amd64.deb ~/Desktop/
+  cd ~/Desktop || exit 1
+  sudo dpkg -i bat_0.25.0_amd64.deb lsd_1.1.5_amd64.deb > /dev/null 2>&1
+  mv ~/auto_bspwm/zsh/.zshrc ~/.zshrc
+  sudo cp ~/auto_bspwm/zsh/.zshrc /root/.zshrc
+  rm ~/Desktop/bat_0.25.0_amd64.deb ~/Desktop/lsd_1.1.5_amd64.deb
   ok "Herramientas adicionales instaladas"
 }
 
@@ -189,4 +193,3 @@ install_utilities
 finalize_setup
 
 echo -e "\n${green}[✔] BSPWM instalado y configurado correctamente!${end}"
-
