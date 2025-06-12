@@ -68,16 +68,10 @@ clone_and_build_sxhkd() {
 }
 
 configure_bspwm_sxhkd() {
-  status "Configurando bspwm y sxhkd"
-  local bspwmrc_path=~/auto_bspwm/bspwmrc
-  if [[ ! -f "$bspwmrc_path" ]]; then
-    error "Archivo $bspwmrc_path no encontrado"
-    exit 1
-  fi
   mkdir -p ~/.config/{bspwm,sxhkd}
-  cp -f "$bspwmrc_path" ~/.config/bspwm/bspwmrc
+  cp ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
   chmod +x ~/.config/bspwm/bspwmrc
-  cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
+  cp ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
   ok "bspwm y sxhkd configurados"
 }
 
