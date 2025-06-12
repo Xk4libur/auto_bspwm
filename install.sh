@@ -33,7 +33,7 @@ instalar_dependencias() {
         libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev \
         libevdev-dev uthash-dev libev-dev libcairo2-dev \
         libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev \
-        libcurl4-openssl-dev libnl-genl-3-dev kitty rofi rofi-themes micro &>/dev/null
+        libcurl4-openssl-dev libnl-genl-3-dev kitty rofi micro &>/dev/null
 }
 
 compilar_proyecto() {
@@ -81,7 +81,7 @@ instalar_polybar() {
     cd ~/Downloads || exit
     git clone https://github.com/VaughnValle/blue-sky.git &>/dev/null
     mkdir -p ~/.config/polybar
-    cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
+    cp -r ~/Downloads/blue-sky/polybar/fonts/* ~/.config/polybar/
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
     sudo cp ~/Downloads/blue-sky/fonts/* /usr/share/fonts/truetype/
     fc-cache -f &>/dev/null
@@ -119,7 +119,6 @@ configurar_binarios_y_temas() {
     mv ~/auto_bspwm/polybar/* ~/.config/polybar/
     mv ~/auto_bspwm/bin/* ~/.config/bin/
     mv ~/auto_bspwm/zsh/.zshrc ~/.zshrc
-    sudo cp ~/.zshrc /root/.zshrc
 
     info "Instalando bat y lsd..."
     mv ~/auto_bspwm/*.deb ~/Desktop/
@@ -146,5 +145,4 @@ limpiar_archivos_zsh
 
 # Tema rofi (último porque requiere interacción)
 rofi-theme-selector
-
 success "Instalación y configuración completadas correctamente."
