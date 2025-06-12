@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # Funciones para mensajes
 status() { echo -e "\033[1;34m[...]\033[0m $*"; }
@@ -28,8 +27,8 @@ create_symlinks() {
 
 install_dependencies() {
   status "Instalando dependencias"
-  run sudo apt update
-  run sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
+  sudo apt update
+  sudo apt install -y build-essential git vim cmake cmake-data pkg-config meson \
     python3-sphinx python3-xcbgen xcb-proto \
     libxcb1-dev libxcb-util0-dev libxcb-ewmh-dev \
     libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev \
