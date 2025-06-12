@@ -85,6 +85,7 @@ instalar_polybar() {
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
     sudo cp ~/Downloads/blue-sky/fonts/* /usr/share/fonts/truetype/
     fc-cache -f &>/dev/null
+}
 
 instalar_picom() {
     info "Instalando picom..."
@@ -114,10 +115,11 @@ configurar_binarios_y_temas() {
     info "Instalando binarios, rofi y micro..."
     mkdir -p ~/.config/bin ~/.config/polybar
 
-    sudo mv ~/auto_bspwm/polybar/* ~/.config/polybar/
-    sudo mv ~/auto_bspwm/bin/* ~/.config/bin/
-    mv ~/auto_bspwm/zsh/.zshrc ~/home/$USER/.zshrc
-    sudo cp ~/.zshrc ~/root/.zshrc
+    # No uses sudo para mover a tu home
+    mv ~/auto_bspwm/polybar/* ~/.config/polybar/
+    mv ~/auto_bspwm/bin/* ~/.config/bin/
+    mv ~/auto_bspwm/zsh/.zshrc ~/.zshrc
+    sudo cp ~/.zshrc /root/.zshrc
 
     info "Instalando bat y lsd..."
     mv ~/auto_bspwm/*.deb ~/Desktop/
