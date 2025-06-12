@@ -80,10 +80,11 @@ instalar_polybar() {
     info "Configurando polybar..."
     cd ~/Downloads || exit
     git clone https://github.com/VaughnValle/blue-sky.git &>/dev/null
-    mkdir -p ~/.config/polybar
-    cp -r ~/Downloads/blue-sky/polybar/fonts/* ~/.config/polybar/
+    mkdir -p ~/.config/polybar/
+    cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
-    sudo cp ~/Downloads/blue-sky/fonts/* /usr/share/fonts/truetype/
+    cd ~/Downloads/blue-sky/polybar/fonts/
+    cp * ~/usr/share/fonts/truetype/
     fc-cache -f &>/dev/null
 }
 
@@ -143,6 +144,4 @@ instalar_p10k
 configurar_binarios_y_temas
 limpiar_archivos_zsh
 
-# Tema rofi (último porque requiere interacción)
-rofi-theme-selector
 success "Instalación y configuración completadas correctamente."
