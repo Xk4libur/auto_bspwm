@@ -73,13 +73,24 @@ clone_and_build_sxhkd() {
 configure_bspwm_sxhkd() {
   status "Configurando bspwm y sxhkd"
   run mkdir -p ~/.config/{bspwm,sxhkd}
-  if [ -f ~/auto_bspwm/bspwmrc_new ]; then
-    run cp -f ~/auto_bspwm/bspwmrc_new ~/.config/bspwm/bspwmrc
+
+  script_dir="$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd)"
+  bspwmrc_path="$script_dir/bspwmrc_new"
+  sxhkdrc_path="$script_dir/sxhkdrc_new"
+
+  if [ -f "$bspwmrc_path" ]; then
+    run cp -f "$bspwmrc_path" ~/.config/bspwm/bspwmrc
     run chmod +x ~/.config/bspwm/bspwmrc
   else
     echo -e "${yellow}[!] bspwmrc_new no encontrado, se omitió la copia${end}"
   fi
-  run cp -f ~/auto_bspwm/sxhkdrc_new ~/.config/sxhkd/sxhkdrc
+
+  if [ -f "$sxhkdrc_path" ]; then
+    run cp -f "$sxhkdrc_path" ~/.config/sxhkd/sxhkdrc
+  else
+    echo -e "${yellow}[!] sxhkdrc_new no encontrado, se omitió la copia${end}"
+  fi
+
   ok "bspwm y sxhkd configurados"
 }
 
