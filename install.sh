@@ -84,7 +84,7 @@ instalar_polybar() {
     cp -r ~/Downloads/blue-sky/polybar/* ~/.config/polybar/
     echo "~/.config/polybar/launch.sh &" >> ~/.config/bspwm/bspwmrc
     cd ~/Downloads/blue-sky/polybar/fonts/
-    cp * /usr/share/fonts/truetype/
+    sudo cp * /usr/share/fonts/truetype/
     fc-cache -f &>/dev/null
 }
 
